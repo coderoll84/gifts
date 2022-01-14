@@ -1,0 +1,23 @@
+﻿[
+   {
+      "SchemaName": "dbo",
+      "Tables": [
+         {
+            "Columns": [
+               {
+                  "Name": "Estado",
+                  "NewName": "Descripcion"
+               }
+            ],
+            "Name": "Estados",
+            "NewName": "Estados"
+         },
+         {
+            "Columns": [ ],
+            "Name": "Proveedores",
+          "NewName": "Proveedor"
+         }
+      ],
+      "UseSchemaName": false
+   }
+]

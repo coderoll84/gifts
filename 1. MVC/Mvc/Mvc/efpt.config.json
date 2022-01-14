@@ -1,0 +1,74 @@
+﻿{
+   "CodeGenerationMode": 2,
+   "ContextClassName": "PvContext",
+   "ContextNamespace": null,
+   "DefaultDacpacSchema": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": false,
+   "ModelNamespace": null,
+   "OutputContextPath": "Data\/Context",
+   "OutputPath": "Data\/Models",
+   "ProjectRootNamespace": "Mvc",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 0,
+   "SelectedToBeGenerated": 0,
+   "Tables": [
+      {
+         "Name": "[dbo].[Categorias]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CodigosPostales]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Direcciones]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Estados]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Municipios]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Ocasiones]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ProductoOcasiones]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Productos]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Proveedores]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Sucursales]",
+         "ObjectType": 0
+      }
+   ],
+   "UiHint": "DESKTOP.PuntoVenta",
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": false,
+   "UseDbContextSplitting": false,
+   "UseFluentApiOnly": true,
+   "UseHandleBars": false,
+   "UseInflector": true,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": false,
+   "UseNoConstructor": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoNavigations": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": false,
+   "UseSchemaFolders": false,
+   "UseSpatial": false
+}

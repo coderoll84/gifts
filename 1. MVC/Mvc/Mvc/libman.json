@@ -1,0 +1,14 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "materialize@1.0.0",
+      "destination": "wwwroot/lib/materialize/",
+      "files": [
+        "css/materialize.min.css",
+        "js/materialize.min.js"
+      ]
+    }
+  ]
+}
