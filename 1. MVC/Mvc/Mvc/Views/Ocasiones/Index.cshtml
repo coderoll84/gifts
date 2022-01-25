@@ -1,0 +1,50 @@
+﻿@model IEnumerable<Mvc.Data.Models.Ocasione>
+
+@{
+    ViewData["Title"] = "Ocasiones";
+}
+<div class="container">
+    <h1>Ocasiones</h1>
+<div class="card">
+<div class="row">
+    <div class="col s2 offset-s10">
+        <div class="valign-wrapper">
+            Agregar <i class="small material-icons">add_circle</i>
+        </div>
+    </div>
+</div>
+
+<table class="highlight responsive-table">
+    <thead>
+        <tr>
+            <th>
+                Ocasión
+            </th>
+            <th>
+                Acciones
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ocasion)
+            </td>
+            <td>
+                <i class="material-icons">edit</i> |
+                <i class="material-icons">delete_forever</i>
+
+                
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+</div>
+</div>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
