@@ -9,7 +9,7 @@
 <div class="row">
     <div class="col s2 offset-s10">
         <div class="valign-wrapper">
-            Agregar <i class="small material-icons">add_circle</i>
+            Agregar <i onclick="Attach('Ocasión','');" class="small material-icons">add_circle</i>
         </div>
     </div>
 </div>
@@ -25,17 +25,15 @@
             </th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="tblBody">
 @foreach (var item in Model) {
-        <tr>
+        <tr id="row_@item.Id">
             <td>
                 @Html.DisplayFor(modelItem => item.Ocasion)
             </td>
             <td>
-                <i class="material-icons">edit</i> |
-                <i class="material-icons">delete_forever</i>
-
-                
+                <i class="material-icons" onclick="Attach('Ocasión',@item.Id);">edit</i> |
+                <i class="material-icons" onclick="Delete('Ocasión','@item.Ocasion',@item.Id);">delete_forever</i>
             </td>
         </tr>
 }
@@ -44,7 +42,121 @@
 </div>
 </div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+  <!-- Modal Structure -->
+  <div id="attachModal" class="modal">
+    <div class="modal-content">
+      <h4 id="attachTitle">Modal Header</h4>
+      <div id="attachBody"></div>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+        <a href="#!" id="cmdSave" class="waves-effect waves-green btn">Guardar</a>
+    </div>
+  </div>
 
+
+
+  <div id="deleteModal" class="modal">
+    <div class="modal-content">
+      <h4 id="deleteTitle">Modal Header</h4>
+      <p id="deleteMessage">A bunch of text</p>
+      <p><small>Esta acción no se puede deshacer.</small></p>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+        <a href="#!" id="cmdDelete" class="modal-close waves-effect waves-red btn red">Eliminar</a>
+    </div>
+  </div>
+
+
+
+  @section Scripts{
+      <script>
+          let idDelete;
+
+          document.getElementById('cmdDelete').addEventListener('click', () =>{
+              ConfirmDelete();
+          });
+          document.getElementById('cmdSave').addEventListener('click', () =>{
+              ConfirmAttach();
+          });
+
+      var Delete = function (entity, element,id) {
+            event.stopPropagation();
+            document.getElementById('deleteTitle').innerHTML = `Eliminar ${entity}`;
+            document.getElementById('deleteMessage').innerHTML = `¿Seguro de eliminar el registro ${element}?`;
+            idDelete = id;
+            let elem = document.getElementById('deleteModal');
+            let instance = M.Modal.init(elem, { dismissible: false });
+            instance.open();
+        }
+
+        var Attach = function (entity, id) {
+            let uri = `Ocasiones/Attach/${id}`;
+            document.getElementById('attachTitle').innerHTML = id === "" ? `Agregar ${entity}` : `Editar ${entity}` ;
+            $("#attachBody").load(uri,function(){
+                $("#attachModal").modal('open');
+                M.updateTextFields();
+            });
+        }
+
+        var ConfirmDelete = function () {
+            $.ajax({
+                type:"POST",
+                url: "Ocasiones/DeleteConfirmed",
+                data: { id: idDelete}
+            })
+            .done(function( data ) {
+                var row = document.getElementById(`row_${data.id}`);
+                row.remove();
+                  var toastHTML = '<span>Registro eliminado.</span><button class="btn-flat toast-action green-text"><i class="material-icons">done</i></button>';
+                  M.toast({html: toastHTML});
+            })
+            .fail(function() {
+                var toastHTML = '<span>No se elimino el registro.</span><button class="btn-flat toast-action red-text">Error</button>';
+                M.toast({html: toastHTML});
+            });
+        }
+
+
+        var ConfirmAttach = function () {
+            var formValues = $('#form').serialize();
+            $.ajax({
+                type:"POST",
+                url: "Ocasiones/AttachConfirmed",
+                data: formValues
+            })
+            .done(function(data) {
+                console.log(data);
+                var toastHTML = '<span>Información guardada.</span><button class="btn-flat toast-action green-text"><i class="material-icons">done</i></button>';
+                  M.toast({html: toastHTML});
+
+                  var row = document.getElementById(`row_${data.id}`);
+                  if (row == undefined)
+                  {
+                      var newRow = `
+                        <tr id="row_${data.id}">
+                            <td>
+                                ${data.ocasion}
+                            </td>
+                            <td>
+                                <i class="material-icons" onclick="Attach('Ocasión',${data.id});">edit</i> |
+                                <i class="material-icons" onclick="Delete('Ocasión','${data.ocasion}',${data.id});">delete_forever</i>
+                            </td>
+                        </tr>`;
+                    var tbl = document.getElementById('tblBody');
+                    tbl.insertAdjacentHTML('beforeend',newRow);
+                  }else
+                  {
+                    var td = row.getElementsByTagName("td")[0];
+                    td.innerText = data.ocasion;
+                  }
+                $("#attachModal").modal('close');
+            })
+            .fail(function() {
+                var toastHTML = '<span>Problema al guardar información.</span><button class="btn-flat toast-action red-text">Error</button>';
+                M.toast({html: toastHTML});
+            });
+        }
+        </script>
+  }

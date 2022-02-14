@@ -69,38 +69,36 @@ namespace Mvc.Controllers
         }
 
         // GET: Ocasiones/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Attach(int? id)
         {
+            var entity = new Ocasione();
             if (id == null)
             {
-                return NotFound();
+                entity.Id = 0;
+                return PartialView("Attach", entity);
             }
-
             var ocasione = await _context.Ocasiones.FindAsync(id);
-            if (ocasione == null)
-            {
-                return NotFound();
-            }
-            return View(ocasione);
+            return PartialView("Attach",ocasione);
         }
 
         // POST: Ocasiones/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Ocasion")] Ocasione ocasione)
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> AttachConfirmed([Bind("Id,Ocasion")] Ocasione ocasione)
         {
-            if (id != ocasione.Id)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(ocasione);
+                    if (ocasione.Id > 0)
+                    {
+                        _context.Update(ocasione);
+                    }
+                    else {
+                        _context.Add(ocasione);
+                    }
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -114,38 +112,19 @@ namespace Mvc.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
-            return View(ocasione);
-        }
-
-        // GET: Ocasiones/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var ocasione = await _context.Ocasiones
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (ocasione == null)
-            {
-                return NotFound();
-            }
-
-            return View(ocasione);
+            return Json(ocasione);
         }
 
         // POST: Ocasiones/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        [HttpPost, ActionName("DeleteConfirmed")]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var ocasione = await _context.Ocasiones.FindAsync(id);
             _context.Ocasiones.Remove(ocasione);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return Ok(ocasione);
         }
 
         private bool OcasioneExists(int id)
