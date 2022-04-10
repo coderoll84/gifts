@@ -78,6 +78,11 @@
               ConfirmDelete();
           });
           document.getElementById('cmdSave').addEventListener('click', () =>{
+              $('#form').validate();
+              if (!$('#form').valid()) {
+                  validateMaterialize();
+                  return;
+              }
               ConfirmAttach();
           });
 
@@ -95,6 +100,8 @@
             let uri = `Ocasiones/Attach/${id}`;
             document.getElementById('attachTitle').innerHTML = id === "" ? `Agregar ${entity}` : `Editar ${entity}` ;
             $("#attachBody").load(uri,function(){
+                $.validator.unobtrusive.parse("#form");
+                //requiredMaterialize();
                 $("#attachModal").modal('open');
                 M.updateTextFields();
             });
