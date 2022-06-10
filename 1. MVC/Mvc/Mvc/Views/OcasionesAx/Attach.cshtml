@@ -1,0 +1,17 @@
+﻿@model Mvc.Models.OcasionModel
+
+<div class="row">
+    <div class="col s12">
+        <br />
+    <form id="form" class="col s12">
+        <input type="hidden" asp-for="Id" />
+      <div class="row">
+        <div class="input-field col s8">
+          <input asp-for="Ocasion" class="validate" />
+          <label asp-for="Ocasion"></label>
+          <span class="helper-text" data-error=""></span>
+        </div>
+      </div>
+    </form>
+    </div>
+  </div>

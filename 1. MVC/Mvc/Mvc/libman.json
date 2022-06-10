@@ -9,6 +9,27 @@
         "css/materialize.min.css",
         "js/materialize.min.js"
       ]
+    },
+    {
+      "provider": "unpkg",
+      "library": "axios@0.27.2",
+      "destination": "wwwroot/lib/axios/",
+      "files": [
+        "dist/axios.min.js"
+      ]
+    },
+    {
+      "library": "datatables@1.10.21",
+      "destination": "wwwroot/lib/datatables/",
+      "files": [
+        "js/jquery.dataTables.min.js",
+        "images/sort_asc.png",
+        "images/sort_asc_disabled.png",
+        "images/sort_both.png",
+        "images/sort_desc.png",
+        "images/sort_desc_disabled.png",
+        "css/jquery.dataTables.min.css"
+      ]
     }
   ]
 }

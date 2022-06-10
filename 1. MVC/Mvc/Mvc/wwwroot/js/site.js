@@ -29,3 +29,15 @@ const toast = {
         M.toast({ html: toastHTML });
     }
 }
+
+
+const sdtOptions =
+{
+    labels: {
+        placeholder: "Buscar...",
+        perPage: "Mostrar {select} registros",
+        noRows: "No se encontraron resultados",
+        info: "Mostrando del {start} al {end} de {rows} registros"
+    },
+    nextText: "Siguiente", prevText: "Anterior"
+}
