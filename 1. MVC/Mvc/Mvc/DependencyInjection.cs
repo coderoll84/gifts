@@ -1,5 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mvc.Data.Context;
+using Mvc.Data.Models;
+using Mvc.DataAccess.Interfaces;
+using Mvc.DataAccess.Servicios;
 
 namespace Mvc
 {
@@ -7,6 +10,7 @@ namespace Mvc
     {
         public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddScoped<IRepositoryAsync<Ocasione>, RepositoryAsync<Ocasione>>();
             
             services.AddDbContext<PvContext>(opt =>
             {

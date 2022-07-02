@@ -2,23 +2,24 @@
 using Microsoft.EntityFrameworkCore;
 using Mvc.Data.Context;
 using Mvc.Data.Models;
+using Mvc.DataAccess.Interfaces;
 using Mvc.Models;
 
 namespace Mvc.Controllers
 {
     public class OcasionesFaController : Controller
     {
-        private readonly PvContext _context;
+        private readonly IRepositoryAsync<Ocasione> _repository;
 
-        public OcasionesFaController(PvContext context)
+        public OcasionesFaController(IRepositoryAsync<Ocasione> repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         // GET: Ocasiones
         public async Task<IActionResult> Index()
         {
-            var data = await _context.Ocasiones.ToListAsync();
+            var data = await _repository.GetAll();
 
             return View(data);
         }
@@ -32,7 +33,7 @@ namespace Mvc.Controllers
                 model.Id = 0;
                 return PartialView("Attach", model);
             }
-            var ocasione = await _context.Ocasiones.FindAsync(id);
+            var ocasione = await _repository.GetByID(id);
             model.Id = ocasione.Id;
             model.Ocasion = ocasione.Ocasion;
 
@@ -54,21 +55,20 @@ namespace Mvc.Controllers
                 {
                     if (entity.Id > 0)
                     {
-                        var ocasion = await _context.Ocasiones.Where(o => o.Ocasion == model.Ocasion && o.Id != model.Id).FirstOrDefaultAsync();
+                        var ocasion = await _repository.Find(o => o.Ocasion == model.Ocasion && o.Id != model.Id);
                         if (ocasion != null) return BadRequest("Registro duplicado.");
-                        _context.Update(entity);
+                        await _repository.Update(entity);
                     }
                     else
                     {
-                        var ocasion = await _context.Ocasiones.Where(o => o.Ocasion == model.Ocasion).FirstOrDefaultAsync();
+                        var ocasion = await _repository.Find(o => o.Ocasion == model.Ocasion);
                         if (ocasion != null) return BadRequest("Registro duplicado.");
-                        _context.Add(entity);
+                        await _repository.Insert(entity);
                     }
-                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!OcasioneExists(entity.Id))
+                    if (!await OcasioneExists(entity.Id))
                     {
                         return NotFound();
                     }
@@ -86,15 +86,14 @@ namespace Mvc.Controllers
         //[ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var ocasione = await _context.Ocasiones.FindAsync(id);
-            _context.Ocasiones.Remove(ocasione);
-            await _context.SaveChangesAsync();
+            var ocasione = await _repository.Delete(id);
             return Ok(ocasione);
         }
 
-        private bool OcasioneExists(int id)
+        private async Task<bool> OcasioneExists(int id)
         {
-            return _context.Ocasiones.Any(e => e.Id == id);
+            var entity = await _repository.GetByID(id);
+            return (entity is null);
         }
     }
 }
