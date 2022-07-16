@@ -30,12 +30,12 @@ async function loadDataWithPatameters(url, form, message) {
         return data;
     } catch (err) {
         handleError_(err);
-        return {};
+        return undefined;
     }
 }
 
 function handleError_(error) {
     console.error(error);
-    var toastHTML = '<span>No se pudo leer la información.</span><button class="btn-flat toast-action red-text">Error</button>';
+    var toastHTML = `<span>${error.response.data}</span><button class="btn-flat toast-action red-text">Error</button>`;
     M.toast({ html: toastHTML });
 }

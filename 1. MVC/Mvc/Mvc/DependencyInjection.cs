@@ -10,6 +10,7 @@ namespace Mvc
     {
         public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<IRepositoryAsync<Ocasione>, RepositoryAsync<Ocasione>>();
             
             services.AddDbContext<PvContext>(opt =>

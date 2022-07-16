@@ -1,0 +1,180 @@
+﻿@model IEnumerable<Mvc.Data.Models.Ocasione>
+
+@{
+    ViewData["Title"] = "Ocasiones";
+    ViewData["Model"] = "Ocasión";
+}
+
+<link href="~/lib/datatables/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="~/lib/datatables/css/material.css" rel="stylesheet" />
+
+<div class="container">
+    <h1>@ViewData["Title"]</h1>
+<div class="card">
+<div class="row">
+    <div class="col s2 offset-s10">
+        <a id="cmdAdd" class="btn-floating btn-large waves-effect waves-light green">
+            <i class="material-icons" style="pointer-events: none;">add</i>
+        </a>
+    </div>
+</div>
+
+<table id="myTable" class="highlight responsive-table">
+    <thead>
+        <tr>
+            <th>
+                Ocasión
+            </th>
+            <th>
+                Acciones
+            </th>
+        </tr>
+    </thead>
+    <tbody id="tblBody">
+@foreach (var item in Model) {
+        <tr id="row_@item.Id">
+            <td>
+                @Html.DisplayFor(modelItem => item.Ocasion)
+            </td>
+            <td>
+                <i class="material-icons editar" data-id="@item.Id">edit</i> |
+                <i class="material-icons eliminar" data-id="@item.Id" data-element="@item.Ocasion">delete_forever</i>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+</div>
+</div>
+
+  <!-- Modal Structure -->
+  <div id="attachModal" class="modal">
+    <div class="modal-content">
+      <h4 id="attachTitle">Modal Header</h4>
+      <div id="attachBody"></div>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+        <a href="#!" id="cmdSave" class="waves-effect waves-green btn">Guardar</a>
+    </div>
+  </div>
+
+  <div id="deleteModal" class="modal">
+    <div class="modal-content">
+      <h4 id="deleteTitle">Modal Header</h4>
+      <p id="deleteMessage">A bunch of text</p>
+      <p><small>Esta acción no se puede deshacer.</small></p>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+        <a href="#!" id="cmdDelete" class="modal-close waves-effect waves-red btn red">Eliminar</a>
+    </div>
+  </div>
+
+@section Scripts{
+    <script src="~/js/axiosFunctions.js" asp-append-version="true"></script>
+    <script src="~/lib/axios/dist/axios.min.js"></script>
+    <script src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
+
+      <script>
+          const model = '@ViewData["Model"]';
+          const attachModal = by.Id('attachModal');
+
+          (function () {
+            $.extend($.fn.dataTable.defaults, {
+                language: { url: "/lib/datatables/js/spanish.json" }
+            });
+        })();
+
+
+
+          var myTable = $('#myTable').DataTable();
+
+
+          document.addEventListener('click', async (event) => {
+              if (event.target.matches('#cmdAdd')) {
+                  await Attach(model,'');
+              }
+              if (event.target.matches('.editar')) {
+                  let id = event.target.dataset.id;
+                  await Attach(model,id);
+              }
+              if (event.target.matches('.eliminar')) {
+                  let id = event.target.dataset.id;
+                  let element = event.target.dataset.element;
+                  await Delete(element,id);
+              }
+          });
+
+          var Attach = async (entity, id) => {
+            let uri = `Ocasion/Get/${id}`;
+            by.Id('attachTitle').innerHTML = id === "" ? `Agregar ${entity}` : `Editar ${entity}` ;
+            
+            var result = await getDataAsync(uri);
+            if (result == '') return;
+
+            by.Id('attachBody').innerHTML = result;
+              $.validator.unobtrusive.parse("#form");
+              var instance = M.Modal.getInstance(attachModal);
+              instance.open();
+              M.updateTextFields();
+          }
+
+          by.Id('cmdSave').addEventListener('click',async () =>{
+              $('#form').validate();
+              if (!$('#form').valid()) {
+                  validateMaterialize();
+                  return;
+              }
+              await ConfirmAttach();
+          });
+          
+          var ConfirmAttach = async () => {
+              var formValues = new FormData(by.Id('form'));
+              let uri = "Ocasion/Save";
+
+              var result = await getDataAsync(uri,formValues);
+              if (result === undefined return;
+              UpdateTable(result);
+          }
+          let UpdateTable = (data) => {
+              var row = document.getElementById(`row_${data.id}`);
+              if (row == undefined)
+              {
+                  myTable.row.add([`${data.ocasion}`,
+                  `<i class="material-icons editar" data-id="${data.id}">edit</i> |
+                        <i class="material-icons eliminar" data-id="${data.id}" data-element="${data.ocasion}">delete_forever</i>`])
+                  .node().id = `row_${data.id}`;
+                  myTable.draw(false);
+            }else
+            {
+                var td = row.getElementsByTagName("td")[0];
+                td.innerText = data.ocasion;
+            }
+            var instance = M.Modal.getInstance(attachModal);
+            instance.close();
+        }
+
+            let idDelete;
+            by.Id('cmdDelete').addEventListener('click',async () =>{
+                var formValues = new FormData();
+                formValues.append("id", idDelete);
+                let uri = "Ocasion/DeleteConfirmed";
+
+                var result = await getDataAsync(uri,formValues);
+                if (result == '') return;
+
+                myTable.row(`#row_${result.id}`).remove().draw();
+            });
+
+            let Delete = function (element,id) {
+              event.stopPropagation();
+              idDelete = id;
+              by.Id('deleteTitle').innerHTML = `Eliminar ${model}`;
+              by.Id('deleteMessage').innerHTML = `¿Seguro de eliminar el registro ${element}?`;
+              let elem = by.Id('deleteModal');
+              let instance = M.Modal.init(elem, { dismissible: false });
+              instance.open();
+            }
+        </script>
+  }
