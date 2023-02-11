@@ -12,7 +12,9 @@ namespace Mvc
         {
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<IRepositoryAsync<Ocasione>, RepositoryAsync<Ocasione>>();
-            
+            services.AddScoped<IRepositoryAsync<Rol>, RepositoryAsync<Rol>>();
+            services.AddScoped<IRepositoryAsync<Usuario>, RepositoryAsync<Usuario>>();
+
             services.AddDbContext<PvContext>(opt =>
             {
                 opt.UseSqlServer(configuration.GetConnectionString("PvConnection"));

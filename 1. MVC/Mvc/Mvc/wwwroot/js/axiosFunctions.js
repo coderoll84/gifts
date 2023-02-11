@@ -36,6 +36,6 @@ async function loadDataWithPatameters(url, form, message) {
 
 function handleError_(error) {
     console.error(error);
-    var toastHTML = `<span>${error.response.data}</span><button class="btn-flat toast-action red-text">Error</button>`;
+    var toastHTML = `<span>${error.response.data.join('<br/>') }</span><button class="btn-flat toast-action red-text">Error</button>`;
     M.toast({ html: toastHTML });
 }

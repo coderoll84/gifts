@@ -8,8 +8,8 @@ namespace Mvc.Controllers
 {
     public abstract class BaseController<Model, Entity> : Controller where Entity : class where Model : Models.Model, new()
     {
-        private readonly IRepositoryAsync<Entity> _repository;
-        private readonly IMapper _mapper;
+        protected readonly IRepositoryAsync<Entity> _repository;
+        protected readonly IMapper _mapper;
 
         protected BaseController(IRepositoryAsync<Entity> repository, IMapper mapper)
         {
@@ -39,7 +39,7 @@ namespace Mvc.Controllers
 
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Save(Model model)
+        public virtual async Task<IActionResult> Save(Model model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

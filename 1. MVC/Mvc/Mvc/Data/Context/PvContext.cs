@@ -28,7 +28,10 @@ namespace Mvc.Data.Context
         public virtual DbSet<Producto> Productos { get; set; }
         public virtual DbSet<ProductoOcasione> ProductoOcasiones { get; set; }
         public virtual DbSet<Proveedor> Proveedors { get; set; }
+        public virtual DbSet<Rol> Rols { get; set; }
         public virtual DbSet<Sucursale> Sucursales { get; set; }
+        public virtual DbSet<Usuario> Usuarios { get; set; }
+        public virtual DbSet<UsuarioRol> UsuarioRols { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -106,6 +109,9 @@ namespace Mvc.Data.Context
 
             modelBuilder.Entity<Ocasione>(entity =>
             {
+                entity.HasIndex(e => e.Ocasion, "IX_Ocasiones")
+                    .IsUnique();
+
                 entity.Property(e => e.Ocasion)
                     .IsRequired()
                     .HasMaxLength(50)
@@ -158,6 +164,16 @@ namespace Mvc.Data.Context
                     .HasConstraintName("FK_Proveedores_Direcciones");
             });
 
+            modelBuilder.Entity<Rol>(entity =>
+            {
+                entity.ToTable("Roles");
+
+                entity.Property(e => e.Descripcion)
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<Sucursale>(entity =>
             {
                 entity.Property(e => e.Sucursal)
@@ -170,6 +186,48 @@ namespace Mvc.Data.Context
                     .HasForeignKey(d => d.IdDirecciones)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Sucursales_Direcciones");
+            });
+
+            modelBuilder.Entity<Usuario>(entity =>
+            {
+                entity.Property(e => e.Email)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Login)
+                    .IsRequired()
+                    .HasMaxLength(15)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Password)
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Telefono)
+                    .IsRequired()
+                    .HasMaxLength(15)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<UsuarioRol>(entity =>
+            {
+                entity.ToTable("UsuarioRoles");
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.HasOne(d => d.IdRolNavigation)
+                    .WithMany(p => p.UsuarioRols)
+                    .HasForeignKey(d => d.IdRol)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_UsuarioRoles_Roles");
+
+                entity.HasOne(d => d.IdUsuarioNavigation)
+                    .WithMany(p => p.UsuarioRols)
+                    .HasForeignKey(d => d.IdUsuario)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_UsuarioRoles_Usuarios");
             });
 
             OnModelCreatingPartial(modelBuilder);

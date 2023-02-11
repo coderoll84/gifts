@@ -9,6 +9,8 @@ namespace Mvc.AutoMapper
         public AutoMapperProfile()
         {
             CreateMap<OcasionModel, Ocasione>().ReverseMap();
+            CreateMap<RolModel, Rol>().ReverseMap();
+            CreateMap<UsuarioModel, Usuario>().ReverseMap();
         }
     }
 }

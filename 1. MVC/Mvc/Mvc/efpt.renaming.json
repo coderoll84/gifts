@@ -1,23 +1,33 @@
 ﻿[
    {
       "SchemaName": "dbo",
-      "Tables": [
-         {
-            "Columns": [
-               {
-                  "Name": "Estado",
-                  "NewName": "Descripcion"
-               }
-            ],
-            "Name": "Estados",
-            "NewName": "Estados"
-         },
-         {
-            "Columns": [ ],
-            "Name": "Proveedores",
-          "NewName": "Proveedor"
-         }
-      ],
+    "Tables": [
+      {
+        "Columns": [
+          {
+            "Name": "Estado",
+            "NewName": "Descripcion"
+          }
+        ],
+        "Name": "Estados",
+        "NewName": "Estados"
+      },
+      {
+        "Columns": [],
+        "Name": "Proveedores",
+        "NewName": "Proveedor"
+      },
+      {
+        "Columns": [],
+        "Name": "Roles",
+        "NewName": "Rol"
+      },
+      {
+        "Columns": [],
+        "Name": "UsuarioRoles",
+        "NewName": "UsuarioRol"
+      }
+    ],
       "UseSchemaName": false
    }
 ]

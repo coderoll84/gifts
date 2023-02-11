@@ -8,6 +8,7 @@
    "ModelNamespace": null,
    "OutputContextPath": "Data\/Context",
    "OutputPath": "Data\/Models",
+   "PreserveCasingWithRegex": true,
    "ProjectRootNamespace": "Mvc",
    "Schemas": null,
    "SelectedHandlebarsLanguage": 0,
@@ -50,25 +51,38 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[Roles]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[Sucursales]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[UsuarioRoles]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Usuarios]",
          "ObjectType": 0
       }
    ],
    "UiHint": "DESKTOP.PuntoVenta",
+   "UncountableWords": null,
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": false,
    "UseDbContextSplitting": false,
    "UseFluentApiOnly": true,
    "UseHandleBars": false,
+   "UseHierarchyId": false,
    "UseInflector": true,
    "UseLegacyPluralizer": false,
    "UseManyToManyEntity": false,
-   "UseNoConstructor": false,
    "UseNoDefaultConstructor": false,
-   "UseNoNavigations": false,
    "UseNoObjectFilter": false,
    "UseNodaTime": false,
    "UseNullableReferences": false,
    "UseSchemaFolders": false,
-   "UseSpatial": false
+   "UseSpatial": false,
+   "UseT4": false
 }
